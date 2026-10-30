@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket Learning</title>
+</head>
+<body style="font-family: sans-serif; padding: 2rem;">
+  <h2>Socket.IO Chat</h2>
+
+  <input id="msgInput" placeholder="Type a message..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <ul id="messagesList"></ul>
+
+  <!-- 1. Load Socket.IO client library -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    // 2. Connect to the server
+    const socket = io();
+
+    // 3. Send message with the exact event name your server listens to
+    function sendMessage() {
+      const input = document.getElementById("msgInput");
+      socket.emit("send_message", input.value);
+      input.value = "";
+    }
+
+    // 4. Listen for the exact event name your server emits
+    socket.on("receive_message", (data) => {
+      const li = document.createElement("li");
+      li.textContent = data;
+      document.getElementById("messagesList").appendChild(li);
+    });
+  </script>
+</body>
+</html>
